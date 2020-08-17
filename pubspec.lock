@@ -9,7 +9,7 @@ packages:
     source: hosted
     version: "6.0.0"
   analyzer:
-    dependency: transitive
+    dependency: "direct dev"
     description:
       name: analyzer
       url: "https://pub.dartlang.org"
@@ -65,7 +65,7 @@ packages:
     source: hosted
     version: "2.1.4"
   build_resolvers:
-    dependency: transitive
+    dependency: "direct dev"
     description:
       name: build_resolvers
       url: "https://pub.dartlang.org"
@@ -300,20 +300,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.9"
-  flutter_page_indicator:
-    dependency: transitive
-    description:
-      name: flutter_page_indicator
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.3"
-  flutter_swiper:
-    dependency: "direct main"
-    description:
-      name: flutter_swiper
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.1.6"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -324,13 +310,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  font_awesome_flutter:
-    dependency: "direct main"
-    description:
-      name: font_awesome_flutter
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "8.8.1"
   glob:
     dependency: transitive
     description:
@@ -651,6 +630,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.99"
+  smooth_page_indicator:
+    dependency: "direct main"
+    description:
+      name: smooth_page_indicator
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.0"
   source_gen:
     dependency: transitive
     description:
@@ -728,13 +714,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.1+2"
-  transformer_page_view:
-    dependency: transitive
-    description:
-      name: transformer_page_view
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.1.6"
   typed_data:
     dependency: transitive
     description:
