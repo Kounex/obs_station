@@ -141,10 +141,14 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
 <<<<<<< HEAD
+<<<<<<< HEAD
     version: "3.4.0"
 =======
     version: "3.4.1"
 >>>>>>> 139339c8825e9a9222463effe278d50d73994903
+=======
+    version: "3.4.1"
+>>>>>>> 0fe10b8105689fdc7c4b55324fd3ddc6cb5785a0
   collection:
     dependency: transitive
     description:
@@ -173,10 +177,14 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
 <<<<<<< HEAD
+<<<<<<< HEAD
     version: "0.3.1"
 =======
     version: "0.3.1+2"
 >>>>>>> 139339c8825e9a9222463effe278d50d73994903
+=======
+    version: "0.3.1+2"
+>>>>>>> 0fe10b8105689fdc7c4b55324fd3ddc6cb5785a0
   connectivity_macos:
     dependency: transitive
     description:
@@ -736,10 +744,14 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
 <<<<<<< HEAD
+<<<<<<< HEAD
     version: "2.2.0"
 =======
     version: "2.2.2"
 >>>>>>> 139339c8825e9a9222463effe278d50d73994903
+=======
+    version: "2.2.2"
+>>>>>>> 0fe10b8105689fdc7c4b55324fd3ddc6cb5785a0
   vector_math:
     dependency: transitive
     description:
