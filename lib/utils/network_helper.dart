@@ -6,7 +6,6 @@ import 'package:crypto/crypto.dart';
 import 'package:obs_blade/types/exceptions/network.dart';
 import 'package:tcp_scanner/tcp_scanner.dart';
 import 'package:web_socket_channel/io.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
 
 import '../models/connection.dart';
 import '../types/enums/request_type.dart';
@@ -68,9 +67,9 @@ class NetworkHelper {
 
   /// Making a request to the OBS WebSocket to trigger a request being
   /// sent back through the stream so we every listener can act accordingly
-  static void makeRequest(WebSocketSink sink, RequestType request,
+  static void makeRequest(IOWebSocketChannel channel, RequestType request,
       [Map<String, dynamic> fields]) {
-    sink.add(json.encode({
+    channel.sink.add(json.encode({
       'message-id': request.index.toString(),
       'request-type': request.toString().split('.')[1],
       if (fields != null) ...fields

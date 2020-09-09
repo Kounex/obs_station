@@ -20,6 +20,8 @@ class PastStreamDataAdapter extends TypeAdapter<PastStreamData> {
       ..kbitsPerSecList = (fields[0] as List)?.cast<int>()
       ..fpsList = (fields[1] as List)?.cast<double>()
       ..cpuUsageList = (fields[2] as List)?.cast<double>()
+      ..memoryUsageList = (fields[17] as List)?.cast<double>()
+      ..listEntryDateMS = (fields[18] as List)?.cast<int>()
       ..strain = fields[3] as double
       ..totalStreamTime = fields[4] as int
       ..numTotalFrames = fields[5] as int
@@ -29,11 +31,9 @@ class PastStreamDataAdapter extends TypeAdapter<PastStreamData> {
       ..outputTotalFrames = fields[9] as int
       ..outputSkippedFrames = fields[10] as int
       ..averageFrameTime = fields[11] as double
-      ..streamEndedMS = fields[12] as int
       ..name = fields[13] as String
       ..starred = fields[14] as bool
-      ..notes = fields[15] as String
-      ..stoppedByUser = fields[16] as bool;
+      ..notes = fields[15] as String;
   }
 
   @override
@@ -46,6 +46,10 @@ class PastStreamDataAdapter extends TypeAdapter<PastStreamData> {
       ..write(obj.fpsList)
       ..writeByte(2)
       ..write(obj.cpuUsageList)
+      ..writeByte(17)
+      ..write(obj.memoryUsageList)
+      ..writeByte(18)
+      ..write(obj.listEntryDateMS)
       ..writeByte(3)
       ..write(obj.strain)
       ..writeByte(4)
@@ -64,16 +68,12 @@ class PastStreamDataAdapter extends TypeAdapter<PastStreamData> {
       ..write(obj.outputSkippedFrames)
       ..writeByte(11)
       ..write(obj.averageFrameTime)
-      ..writeByte(12)
-      ..write(obj.streamEndedMS)
       ..writeByte(13)
       ..write(obj.name)
       ..writeByte(14)
       ..write(obj.starred)
       ..writeByte(15)
-      ..write(obj.notes)
-      ..writeByte(16)
-      ..write(obj.stoppedByUser);
+      ..write(obj.notes);
   }
 
   @override

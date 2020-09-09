@@ -5,10 +5,14 @@ import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../../../../stores/views/dashboard.dart';
-import 'formatted_text.dart';
+import '../../../../../shared/general/formatted_text.dart';
 import 'stats_container.dart';
 
 class Stats extends StatefulWidget {
+  final EdgeInsets pageIndicatorPadding;
+
+  Stats({this.pageIndicatorPadding});
+
   @override
   _StatsState createState() => _StatsState();
 }
@@ -25,7 +29,10 @@ class _StatsState extends State<Stats> {
       return Column(
         children: [
           Padding(
-            padding: const EdgeInsets.only(bottom: 12.0),
+            padding: widget.pageIndicatorPadding ??
+                EdgeInsets.only(
+                  top: 12.0,
+                ),
             child: SmoothPageIndicator(
               controller: _pageController,
               count: 2,

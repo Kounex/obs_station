@@ -28,6 +28,21 @@ class PastStreamData extends HiveObject {
   @HiveField(2)
   List<double> cpuUsageList = [];
 
+  /// RAM usage (in megabytes)
+  @HiveField(17)
+  List<double> memoryUsageList = [];
+
+  /// For every entry we make in our lists (which will be used for charts)
+  /// we will save the DateTime in milliseconds so we know when this entry
+  /// has been done. Since the user could connect to OBS while already streaming
+  /// or disconnect / connect multiple times, the charts would be wrong
+  /// since we could not represent the "holes"
+  ///
+  /// Also used to calculate when the stream started together with
+  /// [totalStreamTime]
+  @HiveField(18)
+  List<int> listEntryDateMS = [];
+
   /// Percentage of dropped frames
   @HiveField(3)
   double strain;
@@ -64,15 +79,6 @@ class PastStreamData extends HiveObject {
   @HiveField(11)
   double averageFrameTime;
 
-  /// Will be set once we create a instance of this class.
-  /// Together with [totalStreamTime] to calculate range as well.
-  ///
-  /// We use end time instead of start time (which might be more common)
-  /// since we create a new instance of [StreamStats] everytime (every 2 seconds)
-  /// we receive a StreamStatus event from our OBS WebSocket connection
-  @HiveField(12)
-  int streamEndedMS;
-
   /// Custom properties which will not be set / transmitted by OBS but set
   /// by the user or internally for checks
 
@@ -90,39 +96,32 @@ class PastStreamData extends HiveObject {
   @HiveField(15)
   String notes;
 
-  /// Will be set if the collection of [StreamStats] has anyhow been stopped
-  /// by the user (seesion closed manually while streaming, app paused etc.)
-  ///
-  /// If [true] or [null]: stopped by user
-  /// If [false]: stopped correctly by stopping OBS stream while app active
-  @HiveField(16)
-  bool stoppedByUser;
-
   /// List of current [StreamStats] which will be used to fill the
   /// list of stats (see above). As soon as we reach [kAmountStreamStatsForAverage]
   /// amount of elements, the lists will get filled and [cacheStreamStats] gets
   /// cleared
   List<StreamStats> _cacheStreamStats = [];
 
-  bool hasBeenPopulated = false;
-
-  addStreamStats(StreamStats streamStats) {
-    this.hasBeenPopulated = true;
-    if (_cacheStreamStats.length < kAmountStreamStatsForAverage) {
-      _cacheStreamStats.add(streamStats);
-    } else {
+  void addStreamStats(StreamStats streamStats) {
+    if (_cacheStreamStats.length >= kAmountStreamStatsForAverage) {
       _setListsFromStreamStats();
       _cacheStreamStats.clear();
-      _cacheStreamStats.add(streamStats);
     }
+    _cacheStreamStats.add(streamStats);
+
+    /// If one of our lists (could be any) is empty, we want to
+    /// fill in the first values directly from our first [StreamStats]
+    /// so we have initial values at the beginning of our statistic
+    if (this.fpsList.isEmpty) {
+      _setListsFromStreamStats();
+    }
+    _updateAbsoluteStats();
   }
 
-  /// Trigger finish up this class so it can be persisted. As long
-  /// as the stream is live we will slowly add entries in our lists
-  /// and as soon as we stop the stream we will call this method
-  /// to set the value of the other properties according to the
-  /// last [StreamStats] in [_cacheStreamStats]
-  finishUpStats({bool finishManually = false}) {
+  /// Update all our statistics values (which are absolute). Will be
+  /// called every time we get a new [StreamStats] instance through
+  /// [addStreamStats]
+  void _updateAbsoluteStats() {
     this.strain = _cacheStreamStats.last.strain;
     this.totalStreamTime = _cacheStreamStats.last.totalStreamTime;
     this.numTotalFrames = _cacheStreamStats.last.numTotalFrames;
@@ -132,20 +131,21 @@ class PastStreamData extends HiveObject {
     this.outputTotalFrames = _cacheStreamStats.last.outputTotalFrames;
     this.outputSkippedFrames = _cacheStreamStats.last.outputSkippedFrames;
     this.averageFrameTime = _cacheStreamStats.last.averageFrameTime;
-    this.streamEndedMS = DateTime.now().millisecondsSinceEpoch;
-    this.stoppedByUser = finishManually;
   }
 
   /// Update our lists (to see the changes of those values over time)
   /// according to our interval set by [kAmountStreamStatsForAverage]
-  _setListsFromStreamStats() {
+  void _setListsFromStreamStats() {
     StreamStats relevantStreamStats =
         _cacheStreamStats.reduce((master, current) => master
           ..kbitsPerSec = min(master.kbitsPerSec, current.kbitsPerSec)
           ..fps = min(master.fps, current.fps)
-          ..cpuUsage = max(master.cpuUsage, current.cpuUsage));
+          ..cpuUsage = max(master.cpuUsage, current.cpuUsage)
+          ..memoryUsage = max(master.memoryUsage, current.memoryUsage));
     this.kbitsPerSecList.add(relevantStreamStats.kbitsPerSec);
     this.fpsList.add(relevantStreamStats.fps);
     this.cpuUsageList.add(relevantStreamStats.cpuUsage);
+    this.memoryUsageList.add(relevantStreamStats.memoryUsage);
+    this.listEntryDateMS.add(DateTime.now().millisecondsSinceEpoch);
   }
 }

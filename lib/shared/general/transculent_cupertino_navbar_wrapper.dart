@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:obs_blade/shared/general/custom_sliver_list.dart';
 
 import '../../utils/styling_helper.dart';
 
@@ -10,38 +11,50 @@ import '../../utils/styling_helper.dart';
 /// border instead through the whole bar (like [CupertinoSliverNavigationBar] does
 /// it for example)
 class TransculentCupertinoNavBarWrapper extends StatelessWidget {
-  final String appBarPreviousTitle;
-  final String appBarTitle;
+  final String previousTitle;
+  final String title;
+  final Widget titleWidget;
+
+  final ScrollController scrollController;
 
   final List<Widget> listViewChildren;
 
-  TransculentCupertinoNavBarWrapper(
-      {this.appBarPreviousTitle,
-      @required this.appBarTitle,
-      this.listViewChildren = const []})
-      : assert(listViewChildren != null);
+  final Widget actions;
+
+  TransculentCupertinoNavBarWrapper({
+    this.previousTitle,
+    this.title,
+    this.titleWidget,
+    this.scrollController,
+    this.listViewChildren = const [],
+    this.actions,
+  }) : assert(
+            (title != null || titleWidget != null) && listViewChildren != null);
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
         CustomScrollView(
+          controller: this.scrollController,
           physics: StylingHelper.platformAwareScrollPhysics,
           slivers: [
-            SliverPadding(
-              padding: EdgeInsets.only(
-                  top: MediaQuery.of(context).padding.top + kToolbarHeight),
-              sliver: SliverList(
-                delegate: SliverChildListDelegate(
-                  this.listViewChildren,
-                ),
-              ),
+            CustomSliverList(
+              customTopPadding:
+                  MediaQuery.of(context).padding.top + kToolbarHeight,
+              children: this.listViewChildren,
             ),
           ],
         ),
         CupertinoNavigationBar(
-          previousPageTitle: this.appBarPreviousTitle,
-          middle: Text(this.appBarTitle),
+          previousPageTitle: this.previousTitle,
+          middle: this.titleWidget ??
+              Text(
+                this.title,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+          trailing: this.actions,
         ),
       ],
     );

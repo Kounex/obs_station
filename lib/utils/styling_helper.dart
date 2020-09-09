@@ -24,11 +24,15 @@ class StylingHelper {
       const Color.fromRGBO(111, 111, 111, 1.0);
 
   /// Added CupertinoIcons
-  static const IconData CUPERTINO_MACBOOK_ICON = const IconData(0xf390,
+  static const IconData CUPERTINO_MACBOOK_ICON = const IconData(0xf466,
       fontFamily: CupertinoIcons.iconFont,
       fontPackage: CupertinoIcons.iconFontPackage);
 
   static const IconData CUPERTINO_QUESTION_ICON = const IconData(0xf445,
+      fontFamily: CupertinoIcons.iconFont,
+      fontPackage: CupertinoIcons.iconFontPackage);
+
+  static const IconData CUPERTINO_QUESTION_ICON_CLEAN = const IconData(0xf444,
       fontFamily: CupertinoIcons.iconFont,
       fontPackage: CupertinoIcons.iconFontPackage);
 
@@ -61,6 +65,22 @@ class StylingHelper {
       fontPackage: CupertinoIcons.iconFontPackage);
 
   static const IconData CUPERTINO_BAR_ICON = const IconData(0xf2b5,
+      fontFamily: CupertinoIcons.iconFont,
+      fontPackage: CupertinoIcons.iconFontPackage);
+
+  static const IconData CUPERTINO_RECTS_OVERLAP = const IconData(0xf3ef,
+      fontFamily: CupertinoIcons.iconFont,
+      fontPackage: CupertinoIcons.iconFontPackage);
+
+  static const IconData CUPERTINO_RECTS_OVERLAP_SOLID = const IconData(0xf3f0,
+      fontFamily: CupertinoIcons.iconFont,
+      fontPackage: CupertinoIcons.iconFontPackage);
+
+  static const IconData CUPERTINO_LANDSCAPE_IMAGE = const IconData(0xf2e4,
+      fontFamily: CupertinoIcons.iconFont,
+      fontPackage: CupertinoIcons.iconFontPackage);
+
+  static const IconData CUPERTINO_PIE_CHART_SOLID = const IconData(0xf484,
       fontFamily: CupertinoIcons.iconFont,
       fontPackage: CupertinoIcons.iconFontPackage);
 

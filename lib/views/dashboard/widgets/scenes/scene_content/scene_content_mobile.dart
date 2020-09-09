@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'audio_inputs.dart';
-import 'scene_items.dart';
+import 'audio_inputs/audio_inputs.dart';
+import 'scene_items/scene_items.dart';
 
 class SceneContentMobile extends StatelessWidget {
   @override
@@ -22,7 +22,7 @@ class SceneContentMobile extends StatelessWidget {
             ],
           ),
           SizedBox(
-            height: 250,
+            height: 300,
             child:
                 TabBarView(physics: NeverScrollableScrollPhysics(), children: [
               Padding(

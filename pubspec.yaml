@@ -1,9 +1,9 @@
 name: obs_blade
 description: A new Flutter project.
-version: 0.6.1+120200817
+version: 0.7.3+2009092025
 
 environment:
-  sdk: '>=2.8.0 <3.0.0'
+  sdk: '>=2.9.0 <3.0.0'
 
 dependencies:
   flutter:
@@ -42,10 +42,10 @@ dependencies:
   hive_flutter: ^0.3.1
 
   # Fancy done layout shit
-  carousel_slider: ^2.2.1
   modal_bottom_sheet: ^0.2.0+1
   fl_chart: ^0.11.0
   smooth_page_indicator: ^0.2.0
+  keyboard_actions: '^3.3.0'
 
 dependency_overrides:
 
@@ -86,3 +86,4 @@ flutter:
   assets:
     - assets/icons/app/
     - assets/images/
+    - assets/images/intro/

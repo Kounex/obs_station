@@ -7,8 +7,13 @@ import 'package:obs_blade/utils/styling_helper.dart';
 import '../../../../types/extensions/list.dart';
 
 class StreamChart extends StatelessWidget {
-  final List<int> data;
-  final int yPuffer;
+  final List<double> data;
+  final List<int> dataTimesMS;
+  final int amountFixedTooltipValue;
+  final int amountFixedYAxis;
+  final double yPuffer;
+  final double yMax;
+  final double yInterval;
   final String dataName;
   final String dataUnit;
   final Color chartColor;
@@ -18,7 +23,12 @@ class StreamChart extends StatelessWidget {
 
   StreamChart({
     @required this.data,
+    @required this.dataTimesMS,
+    this.amountFixedTooltipValue = 0,
+    this.amountFixedYAxis = 0,
+    this.yMax,
     this.yPuffer = 20,
+    this.yInterval = 20,
     @required this.dataName,
     this.dataUnit = '',
     this.chartColor = Colors.white,
@@ -29,7 +39,7 @@ class StreamChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     int streamStart = this.streamEndedMS - this.totalStreamTime * 1000;
-    int maxData = this.data.reduce(
+    double maxData = this.data.reduce(
           (value, element) => max(value, element),
         );
     TextStyle tooltipTextStyle = Theme.of(context).textTheme.bodyText1;
@@ -39,7 +49,7 @@ class StreamChart extends StatelessWidget {
     return LineChart(
       LineChartData(
         minY: 0.0,
-        maxY: maxData.toDouble() + this.yPuffer,
+        maxY: (this.yMax ?? maxData.toDouble()) + this.yPuffer,
         minX: streamStart.toDouble(),
         maxX: this.streamEndedMS.toDouble(),
         axisTitleData: FlAxisTitleData(
@@ -84,7 +94,7 @@ class StreamChart extends StatelessWidget {
             getTooltipItems: (touchedSpots) => touchedSpots
                 .map(
                   (touchSpot) => LineTooltipItem(
-                      '${touchSpot.y.round().toString()}${this.dataUnit}\n${DateFormat.Hm('en_US').format(DateTime.fromMillisecondsSinceEpoch(touchSpot.x.round()))}',
+                      '${touchSpot.y.toStringAsFixed(this.amountFixedTooltipValue)}${this.dataUnit}\n${DateFormat.Hms('de_DE').format(DateTime.fromMillisecondsSinceEpoch(touchSpot.x.round()))}',
                       tooltipTextStyle),
                 )
                 .toList(),
@@ -95,16 +105,16 @@ class StreamChart extends StatelessWidget {
             showTitles: true,
             margin: 15.0,
             textStyle: axisStepsTextStyle,
-            interval: 20.0,
+            interval: this.yInterval,
             getTitles: (interval) =>
-                interval.round().toString() + this.dataUnit,
+                interval.toStringAsFixed(this.amountFixedYAxis) + this.dataUnit,
           ),
           bottomTitles: SideTitles(
             showTitles: true,
             margin: 15.0,
             textStyle: axisStepsTextStyle,
             interval: (this.totalStreamTime * 1000) / 5,
-            getTitles: (interval) => DateFormat.Hm('en_US').format(
+            getTitles: (interval) => DateFormat.Hm('de_DE').format(
               DateTime.fromMillisecondsSinceEpoch(
                 interval.round(),
               ),
@@ -123,7 +133,6 @@ class StreamChart extends StatelessWidget {
                       data.toDouble()),
                 )
                 .toList(),
-            isCurved: true,
             colors: [
               this.chartColor,
             ],

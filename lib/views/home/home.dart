@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:mobx/mobx.dart' as MobX;
+import 'package:obs_blade/shared/general/custom_sliver_list.dart';
 import 'package:provider/provider.dart';
 
 import '../../shared/dialogs/info.dart';
@@ -124,7 +125,10 @@ class _HomeViewState extends State<_HomeView> {
         if (networkStore.connectionResponse.status == BaseResponse.ok) {
           OverlayHandler.closeAnyOverlay();
           Navigator.pushReplacementNamed(
-              context, HomeTabRoutingKeys.Dashboard.route);
+            context,
+            HomeTabRoutingKeys.Dashboard.route,
+            arguments: ModalRoute.of(context).settings.arguments,
+          );
         }
 
         /// If the error for the connection attempt results in an 'Authentication' error,
@@ -162,8 +166,6 @@ class _HomeViewState extends State<_HomeView> {
   @override
   Widget build(BuildContext context) {
     HomeStore landingStore = context.watch<HomeStore>();
-    NetworkStore networkStore = context.watch<NetworkStore>();
-
     return Scaffold(
       /// refreshable is being maintained in our RefresherAppBar - as soon as we reach
       /// our extendedHeight, where we are ready to trigger searching for OBS connections,
@@ -180,6 +182,8 @@ class _HomeViewState extends State<_HomeView> {
           }
         },
         child: CustomScrollView(
+          controller: ModalRoute.of(context).settings.arguments,
+
           /// Scrolling has a unique behaviour on iOS and macOS where we bounce as soon as
           /// we reach the end. Since we are using the stretch of [RefresherAppBar], which uses
           /// [SliverAppBar] internally, to refresh (looking for OBS connections) we need to
@@ -192,19 +196,17 @@ class _HomeViewState extends State<_HomeView> {
               expandedHeight: 200.0,
               imagePath: 'assets/images/base-logo.png',
             ),
-            SliverList(
-              delegate: SliverChildListDelegate(
-                [
-                  Align(
-                    child: Container(
-                      constraints: BoxConstraints(maxWidth: 500.0),
-                      child: ConnectBox(),
-                    ),
+            CustomSliverList(
+              children: [
+                Align(
+                  child: Container(
+                    constraints: BoxConstraints(maxWidth: 500.0),
+                    child: ConnectBox(),
                   ),
-                  SavedConnections(),
-                  SizedBox(height: kBottomNavigationBarHeight),
-                ],
-              ),
+                ),
+                SavedConnections(),
+                SizedBox(height: kBottomNavigationBarHeight),
+              ],
             ),
           ],
         ),

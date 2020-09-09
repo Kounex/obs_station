@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:obs_blade/stores/shared/tabs.dart';
 import 'package:provider/provider.dart';
 
 import 'stores/shared/network.dart';
@@ -14,8 +15,11 @@ import 'utils/styling_helper.dart';
 class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Provider<NetworkStore>(
-      create: (_) => NetworkStore(),
+    return MultiProvider(
+      providers: [
+        Provider<NetworkStore>(create: (_) => NetworkStore()),
+        Provider<TabsStore>(create: (_) => TabsStore()),
+      ],
       child: ValueListenableBuilder(
         valueListenable: Hive.box(HiveKeys.Settings.name).listenable(keys: [
           SettingsKeys.TrueDark.name,
@@ -74,7 +78,10 @@ class App extends StatelessWidget {
           // );
           return MaterialApp(
             theme: theme,
-            initialRoute: AppRoutingKeys.Tabs.route,
+            initialRoute: settingsBox.get(SettingsKeys.HasUserSeenIntro.name,
+                    defaultValue: false)
+                ? AppRoutingKeys.Tabs.route
+                : AppRoutingKeys.Intro.route,
             onGenerateInitialRoutes: (initialRoute) => [
               MaterialWithModalsPageRoute(
                 builder: RoutingHelper.appRoutes[initialRoute],
