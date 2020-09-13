@@ -1,13 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:obs_blade/shared/general/base_card.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../models/connection.dart';
 import '../../../../shared/animator/status_dot.dart';
+import '../../../../shared/general/base_card.dart';
 import '../../../../stores/shared/network.dart';
-import '../../../../stores/views/home.dart';
 import 'edit_dialog.dart';
 
 class ConnectionBox extends StatelessWidget {
@@ -21,12 +19,14 @@ class ConnectionBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     NetworkStore networkStore = context.watch<NetworkStore>();
-    HomeStore landingStore = context.watch<HomeStore>();
 
     return SizedBox(
       width: this.width,
       child: BaseCard(
-        padding: EdgeInsets.all(0),
+        topPadding: 0.0,
+        rightPadding: 0.0,
+        bottomPadding: 0.0,
+        leftPadding: 0.0,
         noPaddingChild: true,
         child: SizedBox(
           height: this.height,
@@ -42,35 +42,25 @@ class ConnectionBox extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       softWrap: false,
                     ),
-                  Text(
-                    '(${this.connection.ssid})',
-                    style: Theme.of(context).textTheme.caption,
-                  ),
+                  // Text(
+                  //   '(${this.connection.ssid})',
+                  //   style: Theme.of(context).textTheme.caption,
+                  // ),
                   Text(
                     '(${this.connection.ip})',
                     style: Theme.of(context).textTheme.caption,
                   ),
                 ],
               ),
-              Observer(
-                builder: (_) => FutureBuilder<List<Connection>>(
-                  future: landingStore.autodiscoverConnections,
-                  builder: (context, snapshot) {
-                    bool reachable = snapshot.hasData &&
-                        snapshot.data.any((discoverConnection) =>
-                            discoverConnection.ip == this.connection.ip &&
-                            discoverConnection.port == this.connection.port);
-                    return Center(
-                      child: StatusDot(
-                        color: reachable ? Colors.green : Colors.red,
-                        text: reachable ? 'Reachable' : 'Not reachable',
-                      ),
-                    );
-                  },
+              Center(
+                child: StatusDot(
+                  color: this.connection.reachable ? Colors.green : Colors.red,
+                  text:
+                      this.connection.reachable ? 'Reachable' : 'Not reachable',
                 ),
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   RaisedButton(
                       child: Text('Connect'),

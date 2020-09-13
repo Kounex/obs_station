@@ -1,6 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:obs_blade/views/statistics/widgets/card_header/header_decoration.dart';
 
 import '../../models/past_stream_data.dart';
 import '../../shared/general/base_card.dart';
@@ -77,14 +79,16 @@ class _StatisticsViewState extends State<StatisticsView> {
                 Column(
               children: [
                 BaseCard(
-                  padding: EdgeInsets.only(
-                      top: 24.0, left: 24.0, right: 24.0, bottom: 12.0),
+                  bottomPadding: 12.0,
                   titlePadding:
                       EdgeInsets.only(left: 14.0, right: 14.0, bottom: 12.0),
                   titleWidget: CardHeader(
                     title: 'Latest\nStream.',
                     description:
                         'The most freshest statistic of your latest stream session',
+                  ),
+                  trailingTitleWidget: HeaderDecoration(
+                    icon: CupertinoIcons.time_solid,
                   ),
                   noPaddingChild: true,
                   child: pastStreamDataBox.isNotEmpty
@@ -103,6 +107,7 @@ class _StatisticsViewState extends State<StatisticsView> {
                     description:
                         'All the statistics of your smexy stream sessions',
                   ),
+                  trailingTitleWidget: HeaderDecoration(),
                   noPaddingChild: true,
                   child: pastStreamDataBox.values.length > 1
                       ? Column(
